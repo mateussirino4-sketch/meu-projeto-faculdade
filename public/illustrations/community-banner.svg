@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 220" role="img" aria-labelledby="title desc">
+  <title id="title">Planejamento que aproxima</title>
+  <desc id="desc">Ilustração original de pessoas organizando escolhas financeiras em ambiente acadêmico</desc>
+  <rect width="1200" height="220" fill="#dcecff"/>
+  <path d="M0 178C156 123 255 213 405 162S680 117 814 167s247 31 386-16v69H0z" fill="#b9d4f3"/>
+  <circle cx="1090" cy="32" r="92" fill="#f1c84b" opacity=".75"/>
+  <g transform="translate(72 28)">
+    <circle cx="65" cy="48" r="30" fill="#efb192"/><path d="M34 44c2-31 54-46 67-7 4 11-1 28-1 28-8-20-22-29-47-20z" fill="#263a66"/>
+    <path d="M20 164c3-66 25-89 49-89 29 0 49 29 54 89z" fill="#2457a7"/><path d="M70 101l45 24 38-41" fill="none" stroke="#efb192" stroke-width="16" stroke-linecap="round"/>
+    <circle cx="162" cy="75" r="25" fill="#8e5b45"/><path d="M139 69c7-32 49-24 50 4l-7 1c-9-14-20-18-43-5z" fill="#212c48"/>
+    <path d="M128 164c1-48 13-69 36-69 24 0 39 21 43 69z" fill="#e77c4e"/>
+  </g>
+  <g transform="translate(410 44)" fill="#123f78">
+    <text x="0" y="38" font-family="Arial, sans-serif" font-size="27" font-weight="700">Planejamento que aproxima</text>
+    <text x="0" y="72" font-family="Arial, sans-serif" font-size="17">Informação clara para escolhas conscientes.</text>
+    <rect x="0" y="93" width="210" height="42" rx="21" fill="#1455a3"/>
+    <text x="105" y="120" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="white">CONHEÇA A JORNADA</text>
+  </g>
+  <g transform="translate(984 82)">
+    <rect width="142" height="58" rx="10" fill="#fff" opacity=".95"/>
+    <rect x="14" y="12" width="34" height="34" rx="7" fill="#2457a7"/>
+    <text x="31" y="36" text-anchor="middle" font-family="Arial" font-size="19" font-weight="700" fill="white">A</text>
+    <text x="58" y="27" font-family="Arial" font-size="15" font-weight="700" fill="#173f7e">Acorda</text>
+    <text x="58" y="44" font-family="Arial" font-size="13" fill="#53657e">Lab</text>
+  </g>
+</svg>

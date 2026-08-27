@@ -1,0 +1,175 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum EligibilityStatus {
+  PENDING
+  ELIGIBLE
+  INELIGIBLE
+  ERROR
+}
+
+enum TransactionStatus {
+  PENDING
+  APPROVED
+  FAILED
+  EXPIRED
+  CANCELLED
+}
+
+enum ConversationStatus {
+  ACTIVE
+  COMPLETED
+  ABANDONED
+}
+
+enum MessageDirection {
+  INCOMING
+  OUTGOING
+  SYSTEM
+}
+
+model DemoUser {
+  id                String                @id @default(uuid())
+  demoIdentifier    String                @unique @map("demo_identifier")
+  displayName       String                @map("display_name")
+  birthDate         DateTime?             @db.Date @map("birth_date")
+  motherName        String?               @map("mother_name")
+  email             String?
+  phone             String?
+  salaryRange       String?               @map("salary_range")
+  debtType          String?               @map("debt_type")
+  isManualEntry     Boolean               @default(false) @map("is_manual_entry")
+  createdAt         DateTime              @default(now()) @map("created_at")
+  updatedAt         DateTime              @updatedAt @map("updated_at")
+  eligibilityChecks EligibilityCheck[]
+  transactions      SimulatedTransaction[]
+  conversations     ConversationSession[]
+  sessions          DemoSession[]
+
+  @@map("demo_users")
+}
+
+model EligibilityCheck {
+  id        String            @id @default(uuid())
+  userId    String            @map("user_id")
+  status    EligibilityStatus @default(PENDING)
+  reason    String?
+  metadata  Json?
+  createdAt DateTime          @default(now()) @map("created_at")
+  updatedAt DateTime          @updatedAt @map("updated_at")
+  user      DemoUser          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@map("eligibility_checks")
+}
+
+model Creditor {
+  id        String   @id @default(uuid())
+  code      String   @unique
+  name      String
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  offers    Offer[]
+  conversations ConversationSession[]
+
+  @@map("creditors")
+}
+
+model Offer {
+  id                String   @id @default(uuid())
+  creditorId        String   @map("creditor_id")
+  title             String
+  debtType          String   @map("debt_type")
+  originalAmount    Decimal  @db.Decimal(12, 2) @map("original_amount")
+  settlementAmount  Decimal  @db.Decimal(12, 2) @map("settlement_amount")
+  discountPercent   Decimal  @db.Decimal(5, 2) @map("discount_percent")
+  availableSlots    Int      @default(50) @map("available_slots")
+  isActive          Boolean  @default(true) @map("is_active")
+  createdAt         DateTime @default(now()) @map("created_at")
+  creditor          Creditor @relation(fields: [creditorId], references: [id], onDelete: Cascade)
+  transactions      SimulatedTransaction[]
+
+  @@index([creditorId, isActive])
+  @@map("offers")
+}
+
+model SimulatedTransaction {
+  id              String            @id @default(uuid())
+  userId          String            @map("user_id")
+  offerId         String?           @map("offer_id")
+  idempotencyKey  String            @unique @map("idempotency_key")
+  status          TransactionStatus @default(PENDING)
+  amount          Decimal           @db.Decimal(12, 2)
+  simulationCode  String            @unique @map("simulation_code")
+  expiresAt       DateTime           @map("expires_at")
+  approvedAt      DateTime?          @map("approved_at")
+  createdAt       DateTime           @default(now()) @map("created_at")
+  updatedAt       DateTime           @updatedAt @map("updated_at")
+  user            DemoUser          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  offer           Offer?            @relation(fields: [offerId], references: [id], onDelete: SetNull)
+
+  @@index([userId, status])
+  @@map("simulated_transactions")
+}
+
+model ConversationSession {
+  id          String             @id @default(uuid())
+  userId      String             @map("user_id")
+  creditorId  String?            @map("creditor_id")
+  status      ConversationStatus @default(ACTIVE)
+  currentStep String             @default("initial") @map("current_step")
+  createdAt   DateTime           @default(now()) @map("created_at")
+  updatedAt   DateTime           @updatedAt @map("updated_at")
+  user        DemoUser           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  creditor    Creditor?          @relation(fields: [creditorId], references: [id], onDelete: SetNull)
+  events      ConversationEvent[]
+
+  @@index([userId, status])
+  @@map("conversation_sessions")
+}
+
+model ConversationEvent {
+  id            String              @id @default(uuid())
+  sessionId     String              @map("session_id")
+  direction     MessageDirection
+  eventType     String               @map("event_type")
+  content       String
+  sequence      Int
+  metadata      Json?
+  createdAt     DateTime             @default(now()) @map("created_at")
+  session       ConversationSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, sequence])
+  @@map("conversation_events")
+}
+
+model AuditEvent {
+  id          String   @id @default(uuid())
+  sessionHash String?  @map("session_hash")
+  eventType   String   @map("event_type")
+  route       String?
+  metadata    Json?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([eventType, createdAt])
+  @@map("audit_events")
+}
+
+model DemoSession {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  tokenHash String   @unique @map("token_hash")
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  user      DemoUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, expiresAt])
+  @@map("demo_sessions")
+}

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 240" role="img">
+  <defs><linearGradient id="bg" x1="0" x2="1"><stop stop-color="#dcecff"/><stop offset="1" stop-color="#f8fbff"/></linearGradient></defs>
+  <rect width="1200" height="240" fill="url(#bg)"/><circle cx="1070" cy="40" r="120" fill="#f5c542" opacity=".22"/><circle cx="80" cy="230" r="110" fill="#6aa9f4" opacity=".18"/>
+  <text x="72" y="76" font-family="Arial,sans-serif" font-size="25" font-weight="800" letter-spacing="3" fill="#2457a7">ACORDA LAB</text><text x="72" y="116" font-family="Arial,sans-serif" font-size="23" font-weight="700" fill="#173f7e">PLANEJAR • COMPARAR • APRENDER</text><text x="72" y="157" font-family="Arial,sans-serif" font-size="17" fill="#4f6682">Uma experiência acadêmica com cenários fictícios</text>
+  <rect x="745" y="37" width="290" height="166" rx="15" fill="white" stroke="#9bbde6" stroke-width="7"/><path d="M790 166v-42h30v42zm53 0V93h30v73zm53 0V68h30v98zm53 0v-57h30v57z" fill="#2457a7"/><path d="M785 81c70 13 127-25 198-28" fill="none" stroke="#f5b82e" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="1110" cy="151" r="33" fill="#9b684f"/><path d="M1072 144c2-47 75-51 76 2-26-14-48-15-76-2z" fill="#17223a"/><path d="M1053 240c7-61 25-86 57-86 35 0 53 28 61 86z" fill="#36a27b"/>
+</svg>
