@@ -1,4 +1,4 @@
-# Portal Acordo Acadêmico
+# teste
 
 Fundação técnica de uma demonstração acadêmica independente. Todos os perfis, credores, propostas e transações são fictícios. O projeto não consulta CPF real, não gera PIX pagável e não se conecta a órgãos públicos, bancos ou autenticação externa.
 
