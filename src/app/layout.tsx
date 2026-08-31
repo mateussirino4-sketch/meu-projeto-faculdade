@@ -12,8 +12,8 @@ const openSans = Open_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: "Portal Acordo Acadêmico",
-    template: "%s | Portal Acordo Acadêmico",
+    default: "gov.br - Programa Novo Desenrola do brasil",
+    template: "%s | gov.br - Programa Novo Desenrola do brasil",
   },
   description:
     "Aplicação acadêmica local com dados e transações exclusivamente fictícios.",
