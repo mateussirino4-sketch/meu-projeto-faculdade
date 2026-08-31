@@ -1,45 +1,73 @@
-export async function criarPixReal(valorEmReais: number, dadosCliente: any) {
-  // 1. Transforma o valor em centavos (Ex: R$ 50,00 vira 5000)
+type Cliente = {
+  nome: string;
+  email: string;
+  telefone: string;
+  cpf: string;
+};
+
+export async function criarPixReal(
+  valorEmReais: number,
+  dadosCliente: Cliente
+) {
+  const apiKey = process.env.BLACKCAT_PRIVATE_KEY;
+
+  if (!apiKey) {
+    throw new Error("BLACKCAT_PRIVATE_KEY não configurada");
+  }
+
   const valorEmCentavos = Math.round(valorEmReais * 100);
 
-  // 2. Monta os dados no padrão da API BlackCat Oficial
   const payload = {
     amount: valorEmCentavos,
     currency: "BRL",
     paymentMethod: "pix",
+
+    items: [
+      {
+        title: "Acordo de quitação",
+        unitPrice: valorEmCentavos,
+        quantity: 1,
+        tangible: false
+      }
+    ],
+
     customer: {
       name: dadosCliente.nome,
       email: dadosCliente.email,
       phone: dadosCliente.telefone,
       document: {
-        number: dadosCliente.cpf.replace(/\D/g, ""), // Limpa o CPF
+        number: dadosCliente.cpf.replace(/\D/g, ""),
         type: "cpf"
       }
     },
+
     pix: {
       expiresInDays: 1
     }
   };
 
-  // 3. Endpoint Oficial de Produção da BlackCat Oficial
-  const URL_REAL = "https://blackcatoficial.com"; 
-  const API_KEY_REAL = process.env.BLACKCAT_PRIVATE_KEY || "";
+  const response = await fetch(
+    "https://api.blackcatoficial.com/api/sales/create-sale",
+    {
+      method: "POST",
+      headers: {
+        "X-API-Key": apiKey,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload),
+      cache: "no-store"
+    }
+  );
 
-  // 4. Faz a conexão real de internet
-  const response = await fetch(URL_REAL, {
-    method: "POST",
-    headers: {
-      "X-API-Key": API_KEY_REAL, 
-      "Content-Type": "application/json",
-      "Idempotency-Key": `PIX-${Date.now()}`
-    },
-    body: JSON.stringify(payload)
-  });
+  const data = await response.json();
 
   if (!response.ok) {
-    const textoErro = await response.text();
-    throw new Error(`Erro BlackCat: ${response.status} - ${textoErro}`);
+    console.error("Erro Blackcat:", data);
+
+    throw new Error(
+      data?.message || `Erro Blackcat (${response.status})`
+    );
   }
 
-  return await response.json(); 
+  return data;
 }
