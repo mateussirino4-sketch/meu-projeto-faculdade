@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Copy, LoaderCircle } from "lucide-react";
 import { Container } from "@/components/ui";
+import QRCode from "qrcode";
 
 export default function Page() {
   const [loading, setLoading] = useState(true);
@@ -59,7 +60,13 @@ export default function Page() {
         }
 
         setPix(copiaCola);
-        setQrCode(imagem);
+
+const qrImage = await QRCode.toDataURL(copiaCola, {
+  width: 280,
+  margin: 2,
+});
+
+setQrCode(qrImage);
       } catch (error) {
         setErro(
           error instanceof Error
@@ -92,7 +99,9 @@ export default function Page() {
           <h1 className="text-center text-lg font-bold">
             Pagamento via PIX
           </h1>
-
+<p className="mt-2 text-center text-sm text-gray-600">
+  Escaneie o QR Code abaixo com o aplicativo do seu banco
+</p>
           {erro ? (
             <div className="mt-6 rounded-md border border-red-300 bg-red-50 p-4 text-red-800">
               {erro}
@@ -101,16 +110,19 @@ export default function Page() {
             <>
               {qrCode && (
                 <img
-                  src={
-                    qrCode.startsWith("data:")
-                      ? qrCode
-                      : `data:image/png;base64,${qrCode}`
-                  }
-                  alt="QR Code PIX"
-                  className="mx-auto mt-6 size-56"
-                />
+  src={qrCode}
+  alt="QR Code PIX"
+  width={280}
+  height={280}
+  className="mx-auto mt-6 rounded-lg bg-white p-2"
+/>
               )}
-
+<div className="mt-4 text-center">
+  <p className="text-sm text-gray-600">Valor a pagar</p>
+  <p className="mt-1 text-2xl font-bold text-gray-900">
+    R$ 178,57
+  </p>
+</div>
               <p className="mt-6 text-sm font-semibold">
                 PIX copia e cola
               </p>
@@ -132,7 +144,9 @@ export default function Page() {
                   <Copy className="size-4" />
                 </button>
               </div>
-
+<p className="mt-5 text-center text-xs text-gray-500">
+  Após a confirmação do pagamento, será iniciado o processo de regularização. A baixa da negativação poderá ocorrer em até 5 dias úteis.
+</p>
               {copied && (
                 <p className="mt-2 text-sm text-green-700">
                   Código PIX copiado

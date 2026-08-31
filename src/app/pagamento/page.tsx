@@ -29,7 +29,7 @@ export default function Page() {
               <strong>R$ 178,57</strong>
             </div>
             <div className="flex justify-between p-4">
-              <span>Taxas ilustrativas</span>
+              <span>Taxas</span>
               <strong>R$ 0,00</strong>
             </div>
             <div className="flex justify-between p-4 text-lg">
@@ -38,7 +38,7 @@ export default function Page() {
             </div>
           </div>
           <div className="mt-5 rounded-md border border-amber-300 bg-amber-50 p-3 text-xs font-semibold text-amber-950">
-            SIMULAÇÃO LOCAL — nenhum valor pode ser pago ou cobrado.
+            Atenção: confira os valores e as condições da proposta antes de prosseguir.
           </div>
           <button
             onClick={() => router.push("/pix-payment")}

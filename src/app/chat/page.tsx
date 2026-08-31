@@ -47,8 +47,8 @@ function InitialLoading({ creditorName }: { creditorName: string }) {
     >
       <LoaderCircle className="size-5 shrink-0 animate-spin text-[#1351b4]" />
       <span className="text-sm">
-        Consultando cenário ilustrativo em{" "}
-        {creditorName || "instituição fictícia"}...
+        Consultando propostas disponíveis em{" "}
+{creditorName || "instituição"}...
       </span>
     </div>
   );
@@ -253,27 +253,27 @@ export default function ChatPage() {
                 <div className="w-full max-w-[385px] rounded-md border border-[#ddd] bg-white p-4 shadow-sm">
                   <div className="flex items-center justify-between gap-4">
                     <div>
-                      <p className="text-sm text-[#666]">Valor ilustrativo</p>
+                      <p className="text-sm text-[#666]">Valor da proposta</p>
                       <p className="mt-1 text-xl font-bold text-[#1351b4]">
                         R$ 178,57
                       </p>
                     </div>
                     <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-bold text-green-700">
-                      Simulação
+                      Proposta disponível
                     </span>
                   </div>
                   <div className="my-4 border-t border-[#e5e5e5]" />
                   <dl className="space-y-1.5 text-sm text-[#555]">
                     <div className="flex justify-between gap-4">
-                      <dt>Valor de referência</dt>
+                      <dt>Valor</dt>
                       <dd>R$ 200,00</dd>
                     </div>
                     <div className="flex justify-between gap-4">
-                      <dt>Desconto ilustrativo</dt>
+                      <dt>Desconto</dt>
                       <dd>R$ 21,43</dd>
                     </div>
                     <div className="flex justify-between gap-4 font-semibold">
-                      <dt>Total simulado</dt>
+                      <dt>Total do acordo</dt>
                       <dd>R$ 178,57</dd>
                     </div>
                   </dl>
@@ -284,19 +284,19 @@ export default function ChatPage() {
                   <article className="w-full max-w-[720px] overflow-hidden rounded-md border border-[#ccd3dd] bg-white shadow-sm">
                     <header className="flex h-12 items-center justify-between bg-[#08234d] px-3 text-white">
                       <span className="grid size-8 place-items-center bg-white text-[10px] font-bold text-[#1351b4]">
-                        DEMO
+                        PORTAL
                       </span>
                       <span className="text-xs">
-                        Protocolo fictício: {demoProtocol}
+                        Protocolo: {demoProtocol}
                       </span>
                     </header>
                     <div className="p-4">
                       <div className="text-center">
                         <h2 className="text-sm font-bold text-[#15213a]">
-                          COMPROVANTE DE SIMULAÇÃO ACADÊMICA
+                          RESUMO DA NEGOCIAÇÃO
                         </h2>
                         <p className="mt-1 text-[11px] text-[#7b8494]">
-                          Ambiente local — dados exclusivamente ilustrativos
+                          Detalhes da proposta
                         </p>
                       </div>
                       <dl className="mt-4 grid grid-cols-2 gap-x-8 gap-y-3 text-xs">
@@ -332,16 +332,16 @@ export default function ChatPage() {
                             </dt>
                             <dd className="mt-1 font-bold text-[#16213a]">
                               {categoryLabels[flow.answers.debtType] ||
-                                "Categoria fictícia"}
+                                "Categoria"}
                             </dd>
                           </div>
                         </div>
                         <div>
                           <dt className="text-[10px] uppercase text-[#8792a5]">
-                            Instituição ilustrativa
+                            Instituição
                           </dt>
                           <dd className="mt-1 font-bold text-[#16213a]">
-                            {creditorName || "Instituição fictícia"} — simulação
+                            {creditorName || "Instituição"} 
                           </dd>
                         </div>
                         <div>
@@ -349,7 +349,7 @@ export default function ChatPage() {
                             Status
                           </dt>
                           <dd className="mt-1 font-bold text-amber-600">
-                            SIMULAÇÃO
+                            Proposta disponível
                           </dd>
                         </div>
                         <div>
@@ -357,20 +357,20 @@ export default function ChatPage() {
                             Condição
                           </dt>
                           <dd className="mt-1 font-bold text-[#16213a]">
-                            Cenário demonstrativo
+                            Condição da proposta
                           </dd>
                         </div>
                         <div>
                           <dt className="text-[10px] uppercase text-[#8792a5]">
-                            Desconto ilustrativo
+                            Desconto
                           </dt>
                           <dd className="mt-1 font-bold text-green-600">
-                            Valor fictício
+                            Valor da negociação
                           </dd>
                         </div>
                       </dl>
                       <p className="mt-4 border-t pt-3 text-[10px] text-[#8792a5]">
-                        Emitido em ambiente acadêmico local
+                        Documento gerado eletronicamente
                       </p>
                     </div>
                   </article>
@@ -380,19 +380,19 @@ export default function ChatPage() {
                       <span className="grid size-6 place-items-center border border-green-700 bg-green-500 text-white">
                         ✓
                       </span>
-                      Simulação encontrada
+                      Proposta encontrada
                     </h2>
                     <p className="mt-2 text-sm">
-                      Cenário acadêmico disponível em{" "}
+                      Proposta disponível em{" "}
                       <strong>
-                        {creditorName || "Instituição fictícia"} — simulação
+                        {creditorName || "Instituição"}
                       </strong>
                       .
                     </p>
                     <div className="mt-4 grid grid-cols-2 rounded-md border border-green-200 bg-white p-3">
                       <div>
                         <p className="text-xs text-[#6f7784]">
-                          Valor ilustrativo
+                          Valor da proposta
                         </p>
                         <p className="mt-1 text-xl font-bold text-green-700">
                           R$ 178,57
@@ -400,15 +400,15 @@ export default function ChatPage() {
                       </div>
                       <div className="text-right">
                         <p className="text-xs text-[#6f7784]">
-                          Condição ilustrativa
+                          Condição 
                         </p>
                         <p className="mt-1 font-bold text-[#1351b4]">
-                          Demonstração
+                          Disponível
                         </p>
                       </div>
                     </div>
                     <p className="mt-2 text-center text-xs">
-                      Nenhuma cobrança ou negociação real será realizada
+                      Confira os dados antes de prosseguir
                     </p>
                   </article>
                 </div>
@@ -451,11 +451,15 @@ export default function ChatPage() {
               {stage === 5 && (
                 <button
                   onClick={() =>
-                    void reply(
-                      "Confirmar simulação",
-                      `Prezado(a) ${flow.answers.fullName || flow.profile.displayName}, seu protocolo de simulação acadêmica foi gerado com sucesso junto a ${creditorName}.\n\nNúmero do Protocolo: 89032262589\n\nEste protocolo é o número de identificação desta simulação acadêmica.`,
-                      6,
-                    )
+                   void reply(
+  "Confirmar proposta",
+  `Prezado(a) ${flow.answers.fullName || flow.profile.displayName}, sua proposta foi confirmada com sucesso junto a ${creditorName}.
+
+Número do Protocolo: ${demoProtocol}
+
+Guarde este número para acompanhar sua proposta.`,
+  6,
+)
                   }
                   disabled={typing}
                   className="flex w-full items-center justify-center gap-2 rounded-full bg-[#1351b4] py-3 font-bold text-white"
@@ -464,23 +468,16 @@ export default function ChatPage() {
                   Confirmar Acordo de Quitação
                 </button>
               )}
-              {stage === 6 && (
-                <button
-                  onClick={() => setStage(7)}
-                  disabled={typing}
-                  className="flex w-full items-center justify-center gap-2 rounded-full bg-[#1351b4] py-3 font-bold text-white"
-                >
-                  Prosseguir
-                </button>
-              )}
-              {stage === 7 && (
-                <button
-                  onClick={() => router.push("/pagamento")}
-                  className="w-full rounded-full bg-[#1351b4] py-3 font-bold text-white"
-                >
-                  Finalizar Cadastro
-                </button>
-              )}
+            {stage === 6 && (
+  <button
+    onClick={() => router.push("/pagamento")}
+    disabled={typing}
+    className="flex w-full items-center justify-center gap-2 rounded-full bg-[#1351b4] py-3 font-bold text-white"
+  >
+    Finalizar Cadastro
+  </button>
+)}
+              
             </footer>
           </section>
         </Container>
