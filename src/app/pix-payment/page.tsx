@@ -41,7 +41,7 @@ export default function Page() {
 
         console.log("Resposta Blackcat:", data);
 
-        const payment = data?.paymentData ?? data;
+        const payment = data?.data?.paymentData;
 
         const copiaCola =
           payment?.copyPaste ||
