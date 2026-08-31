@@ -15,6 +15,7 @@ export async function criarPixReal(
     throw new Error("BLACKCAT_PRIVATE_KEY não configurada");
   }
 
+  // Converte reais para centavos
   const valorEmCentavos = Math.round(valorEmReais * 100);
 
   const payload = {
@@ -27,8 +28,8 @@ export async function criarPixReal(
         title: "Acordo de quitação",
         unitPrice: valorEmCentavos,
         quantity: 1,
-        tangible: false
-      }
+        tangible: false,
+      },
     ],
 
     customer: {
@@ -37,37 +38,62 @@ export async function criarPixReal(
       phone: dadosCliente.telefone,
       document: {
         number: dadosCliente.cpf.replace(/\D/g, ""),
-        type: "cpf"
-      }
+        type: "cpf",
+      },
     },
 
     pix: {
-      expiresInDays: 1
-    }
+      expiresInDays: 1,
+    },
   };
 
   const response = await fetch(
     "https://api.blackcatoficial.com/api/sales/create-sale",
     {
       method: "POST",
+
       headers: {
         "X-API-Key": apiKey,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
+
       body: JSON.stringify(payload),
-      cache: "no-store"
+
+      cache: "no-store",
     }
   );
 
-  const data = await response.json();
+  let data: any;
 
-  if (!response.ok) {
-    console.error("Erro Blackcat:", data);
-
+  try {
+    data = await response.json();
+  } catch {
     throw new Error(
-      data?.message || `Erro Blackcat (${response.status})`
+      `A Blackcat retornou uma resposta inválida (${response.status})`
     );
   }
+
+  // Se a Blackcat rejeitar a cobrança
+  if (!response.ok) {
+    console.error(
+      "ERRO BLACKCAT:",
+      JSON.stringify(data)
+    );
+
+    throw new Error(
+      data?.message ||
+        data?.error ||
+        `Erro Blackcat (${response.status})`
+    );
+  }
+
+  // TEMPORÁRIO:
+  // usado para descobrirmos exatamente onde a Blackcat
+  // está retornando o QR Code e o copia e cola.
+  console.log(
+    "RESPOSTA COMPLETA BLACKCAT:",
+    JSON.stringify(data)
+  );
 
   return data;
 }
