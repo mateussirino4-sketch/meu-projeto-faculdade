@@ -98,7 +98,7 @@ export default function Page() {
           {/* Cabeçalho */}
           <div className="text-center">
             <div className="mx-auto mb-3 w-fit rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-600">
-              Demonstração
+              Pagamento da negociação
             </div>
 
             <h1 className="text-2xl font-bold tracking-tight text-gray-900">
