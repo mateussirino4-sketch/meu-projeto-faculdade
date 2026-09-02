@@ -281,99 +281,133 @@ export default function ChatPage() {
               )}
               {stage >= 6 && (
                 <div className="space-y-4">
-                  <article className="w-full max-w-[720px] overflow-hidden rounded-md border border-[#ccd3dd] bg-white shadow-sm">
-                    <header className="flex h-12 items-center justify-between bg-[#08234d] px-3 text-white">
-                      <span className="grid size-8 place-items-center bg-white text-[10px] font-bold text-[#1351b4]">
-                        PORTAL
-                      </span>
-                      <span className="text-xs">
-                        Protocolo: {demoProtocol}
-                      </span>
-                    </header>
-                    <div className="p-4">
-                      <div className="text-center">
-                        <h2 className="text-sm font-bold text-[#15213a]">
-                          RESUMO DA NEGOCIAÇÃO
-                        </h2>
-                        <p className="mt-1 text-[11px] text-[#7b8494]">
-                          Detalhes da proposta
-                        </p>
-                      </div>
-                      <dl className="mt-4 grid grid-cols-2 gap-x-8 gap-y-3 text-xs">
-                        <div>
-                          <dt className="text-[10px] uppercase text-[#8792a5]">
-                            Nome
-                          </dt>
-                          <dd className="mt-1 font-bold text-[#16213a]">
-                            {flow.answers.fullName || flow.profile.displayName}
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="text-[10px] uppercase text-[#8792a5]">
-                            Identificador
-                          </dt>
-                          <dd className="mt-1 font-bold text-[#16213a]">
-                            {maskIdentifier(flow.profile.demoIdentifier) ||
-                              "000.000.000-00"}
-                          </dd>
-                        </div>
-                        <div className="col-span-2 grid grid-cols-2 gap-8 rounded bg-[#eaf2ff] p-3">
-                          <div>
-                            <dt className="text-[10px] uppercase text-[#8792a5]">
-                              Nº do protocolo
-                            </dt>
-                            <dd className="mt-1 font-bold text-[#1351b4]">
-                              {demoProtocol}
-                            </dd>
-                          </div>
-                          <div>
-                            <dt className="text-[10px] uppercase text-[#8792a5]">
-                              Categoria
-                            </dt>
-                            <dd className="mt-1 font-bold text-[#16213a]">
-                              {categoryLabels[flow.answers.debtType] ||
-                                "Categoria"}
-                            </dd>
-                          </div>
-                        </div>
-                        <div>
-                          <dt className="text-[10px] uppercase text-[#8792a5]">
-                            Instituição
-                          </dt>
-                          <dd className="mt-1 font-bold text-[#16213a]">
-                            {creditorName || "Instituição"} 
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="text-[10px] uppercase text-[#8792a5]">
-                            Status
-                          </dt>
-                          <dd className="mt-1 font-bold text-amber-600">
-                            Proposta disponível
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="text-[10px] uppercase text-[#8792a5]">
-                            Condição
-                          </dt>
-                          <dd className="mt-1 font-bold text-[#16213a]">
-                            Condição da proposta
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="text-[10px] uppercase text-[#8792a5]">
-                            Desconto
-                          </dt>
-                          <dd className="mt-1 font-bold text-green-600">
-                            Valor da negociação
-                          </dd>
-                        </div>
-                      </dl>
-                      <p className="mt-4 border-t pt-3 text-[10px] text-[#8792a5]">
-                        Documento gerado eletronicamente
-                      </p>
-                    </div>
-                  </article>
+                  <article className="w-full max-w-[720px] overflow-hidden rounded-xl border border-[#d8e0ea] bg-white shadow-md">
+  {/* Cabeçalho */}
+  <header className="flex items-center justify-between gap-3 bg-[#08234d] px-5 py-4 text-white">
+    <div>
+      <p className="text-sm font-bold tracking-wide">
+        PORTAL DE NEGOCIAÇÃO
+      </p>
+      <p className="mt-0.5 text-[10px] text-blue-100">
+        Resumo da proposta
+      </p>
+    </div>
+
+    <div className="text-right">
+      <p className="text-[9px] uppercase tracking-wide text-blue-200">
+        Protocolo
+      </p>
+      <p className="text-xs font-bold">
+        {demoProtocol}
+      </p>
+    </div>
+  </header>
+
+  <div className="p-5">
+    {/* Título */}
+    <div className="text-center">
+      <h2 className="text-base font-bold text-[#15213a]">
+        RESUMO DA NEGOCIAÇÃO
+      </h2>
+      <p className="mt-1 text-[11px] text-[#7b8494]">
+        Confira os dados da proposta
+      </p>
+    </div>
+
+    {/* Dados principais */}
+    <dl className="mt-5 grid grid-cols-2 gap-x-6 gap-y-5 text-xs">
+      <div>
+        <dt className="text-[10px] font-medium uppercase tracking-wide text-[#8792a5]">
+          Nome
+        </dt>
+        <dd className="mt-1 font-bold text-[#16213a]">
+          {flow.answers.fullName || flow.profile.displayName}
+        </dd>
+      </div>
+
+      <div>
+        <dt className="text-[10px] font-medium uppercase tracking-wide text-[#8792a5]">
+          Identificador
+        </dt>
+        <dd className="mt-1 font-bold text-[#16213a]">
+          {maskIdentifier(flow.profile.demoIdentifier) || "000.000.000-00"}
+        </dd>
+      </div>
+
+      {/* Protocolo e categoria */}
+      <div className="col-span-2 grid grid-cols-2 gap-6 rounded-lg border border-[#dce8f8] bg-[#f3f7fd] p-4">
+        <div>
+          <dt className="text-[10px] font-medium uppercase tracking-wide text-[#8792a5]">
+            Nº do protocolo
+          </dt>
+          <dd className="mt-1 font-bold text-[#1351b4]">
+            {demoProtocol}
+          </dd>
+        </div>
+
+        <div>
+          <dt className="text-[10px] font-medium uppercase tracking-wide text-[#8792a5]">
+            Categoria
+          </dt>
+          <dd className="mt-1 font-bold text-[#16213a]">
+            {categoryLabels[flow.answers.debtType] || "Categoria"}
+          </dd>
+        </div>
+      </div>
+
+      {/* Instituição */}
+      <div>
+        <dt className="text-[10px] font-medium uppercase tracking-wide text-[#8792a5]">
+          Instituição
+        </dt>
+        <dd className="mt-1 font-bold text-[#16213a]">
+          {creditorName || "Instituição"}
+        </dd>
+      </div>
+
+      {/* Status */}
+      <div>
+        <dt className="text-[10px] font-medium uppercase tracking-wide text-[#8792a5]">
+          Status
+        </dt>
+        <dd className="mt-1 font-bold text-green-700">
+          Proposta disponível
+        </dd>
+      </div>
+
+      {/* Condição */}
+      <div>
+        <dt className="text-[10px] font-medium uppercase tracking-wide text-[#8792a5]">
+          Condição
+        </dt>
+        <dd className="mt-1 font-bold text-[#16213a]">
+          Condição da proposta
+        </dd>
+      </div>
+
+      {/* Negociação */}
+      <div>
+        <dt className="text-[10px] font-medium uppercase tracking-wide text-[#8792a5]">
+          Negociação
+        </dt>
+        <dd className="mt-1 font-bold text-[#1351b4]">
+          Valor disponível
+        </dd>
+      </div>
+    </dl>
+
+    {/* Rodapé */}
+    <div className="mt-5 flex items-center justify-between border-t border-[#d8e0ea] pt-4">
+      <p className="text-[10px] text-[#8792a5]">
+        Documento gerado eletronicamente
+      </p>
+
+      <span className="rounded-full bg-green-50 px-3 py-1 text-[10px] font-bold text-green-700">
+        Proposta encontrada
+      </span>
+    </div>
+  </div>
+</article>
 
                   <article className="w-full max-w-[720px] rounded-md border-2 border-green-500 bg-green-50 p-4 text-green-900 shadow-sm">
                     <h2 className="flex items-center gap-2 font-bold">
@@ -419,11 +453,11 @@ export default function ChatPage() {
               {stage === 3 && (
                 <button
                   onClick={() =>
-                    void reply(
-                      "Prosseguir",
-                      "Acordo de quitação disponível para o seu CPF. Clique em Confirmar Acordo para prosseguir com a regularização do seu nome.",
-                      4,
-                    )
+                   void reply(
+  "Prosseguir",
+  "Acordo de quitação disponível para o seu CPF. Clique em Confirmar Acordo de Quitação para prosseguir com a regularização do seu nome.",
+  5,
+)
                   }
                   disabled={typing}
                   className="flex w-full items-center justify-center gap-2 rounded-full bg-[#1351b4] py-3 font-bold text-white"
@@ -437,7 +471,7 @@ export default function ChatPage() {
                   onClick={() =>
                     void reply(
                       "Prosseguir",
-                      "Acordo de quitação disponível para o seu CPF. Clique em Confirmar Acordo para prosseguir com a regularização do seu nome.",
+                      "Acordo de quitação disponível para o seu CPF. Clique em Prosseguir para prosseguir com a regularização do seu nome.",
                       5,
                     )
                   }
