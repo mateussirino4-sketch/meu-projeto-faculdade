@@ -12,6 +12,7 @@ export type DemoProfile = {
 
 export type DemoAnswers = {
   fullName: string;
+  motherName: string;
   monthlyIncome: string;
   birthDate: string;
   debtType: string;
@@ -29,7 +30,7 @@ export type DemoFlowState = {
   updatedAt: string;
 };
 
-const emptyAnswers: DemoAnswers = { fullName: "", monthlyIncome: "", birthDate: "", debtType: "", email: "", phone: "" };
+const emptyAnswers: DemoAnswers = { fullName: "", motherName: "", monthlyIncome: "", birthDate: "", debtType: "", email: "", phone: "" };
 
 export function createDemoFlow(profile: DemoProfile): DemoFlowState {
   return { version: 1, profile, answers: { ...emptyAnswers }, verificationStep: 0, contentStep: 0, updatedAt: new Date().toISOString() };

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Check, LoaderCircle } from "lucide-react";
 import { SecondaryNav } from "@/components/layout";
@@ -14,64 +14,153 @@ type Field = {
   type?: string;
   options?: Array<{ value: string; label: string }>;
 };
-const fields: Field[] = [
-  {
-    key: "fullName",
-    prompt: "Digite seu nome completo",
-    placeholder: "Digite seu nome completo",
-  },
-  {
-    key: "monthlyIncome",
-    prompt: "Qual é sua faixa salarial atual?",
-    placeholder: "Selecione",
-    options: [
-      { value: "UNEMPLOYED", label: "Desempregado(a)" },
-      { value: "UP_TO_2640", label: "Até R$ 2.640 (até 2 Salários Mínimos)" },
-      {
-        value: "2641_TO_6600",
-        label: "De R$ 2.641 A R$ 6.600 (2 A 5 Salários Mínimos)",
-      },
-      {
-        value: "6601_TO_13200",
-        label: "De R$ 6.601 A R$ 13.200 (5 A 10 Salários Mínimos)",
-      },
-      {
-        value: "ABOVE_13200",
-        label: "Acima De R$ 13.200 (mais De 10 Salários Mínimos)",
-      },
-    ],
-  },
-  {
-    key: "birthDate",
-    prompt: "Digite sua data de nascimento",
-    placeholder: "dd/mm/aaaa",
-    type: "date",
-  },
-  {
-    key: "debtType",
-    prompt: "Qual o tipo de dívida que deseja renegociar?",
-    placeholder: "Selecione",
-    options: [
-      { value: "BANKING", label: "Dívidas Bancárias (banco, Financeira)" },
-      { value: "CARD", label: "Cartão De Crédito" },
-      { value: "FINANCING", label: "Financiamento De Veículo Ou Imóvel" },
-      { value: "SERVICES", label: "Contas De Serviços (água, Luz, Telefone)" },
-      { value: "OTHER", label: "Outros Tipos De Dívida" },
-    ],
-  },
-  {
-    key: "email",
-    prompt: "Qual é o seu email?",
-    placeholder: "Digite seu e-mail",
-    type: "email",
-  },
-  {
-    key: "phone",
-    prompt: "Qual é o seu telefone?",
-    placeholder: "(00) 00000-0000",
-    type: "tel",
-  },
+
+const fakeNames = [
+  "Carlos Eduardo Martins",
+  "Fernanda Lima Souza",
+  "Ricardo Almeida Santos",
+  "Patricia Nogueira Silva",
 ];
+
+const fakeMotherNames = [
+  "Marta Regina Oliveira",
+  "Claudia Beatriz Ferreira",
+  "Rosana Cristina Pereira",
+  "Helena Duarte Ramos",
+];
+
+const fakeBirthDates = ["1989-04-13", "1996-10-27", "1992-07-05", "1985-01-21"];
+
+type ConfirmationKey = "fullName" | "birthDate" | "motherName";
+
+function formatDateLabel(isoDate: string) {
+  const parts = isoDate.split("-");
+  if (parts.length !== 3) return isoDate;
+  const [year, month, day] = parts;
+  return `${day}/${month}/${year}`;
+}
+
+function pickThreeOptions(realValue: string, distractors: string[]) {
+  const base = distractors.filter((value) => value && value !== realValue);
+  const selectedDistractors = base.slice(0, 2);
+  const options = [realValue, ...selectedDistractors].filter(Boolean);
+
+  for (let index = options.length - 1; index > 0; index--) {
+    const random = Math.floor(Math.random() * (index + 1));
+    [options[index], options[random]] = [options[random], options[index]];
+  }
+
+  return options;
+}
+
+function buildFields(realName: string, realBirthDate: string, realMotherName: string) {
+
+  const nameOptions = pickThreeOptions(realName, fakeNames).map((name) => ({
+    value: name,
+    label: name,
+  }));
+  const motherOptions = pickThreeOptions(realMotherName, fakeMotherNames).map(
+    (name) => ({ value: name, label: name }),
+  );
+  const birthOptions = pickThreeOptions(realBirthDate, fakeBirthDates).map(
+    (isoDate) => ({ value: isoDate, label: formatDateLabel(isoDate) }),
+  );
+
+  return [
+    {
+      key: "fullName",
+      prompt: "Confirme seu nome completo",
+      placeholder: "Selecione seu nome",
+      options: nameOptions,
+    },
+    {
+      key: "birthDate",
+      prompt: "Confirme sua data de nascimento",
+      placeholder: "Selecione sua data",
+      options: birthOptions,
+    },
+    {
+      key: "motherName",
+      prompt: "Confirme o nome da sua mae",
+      placeholder: "Selecione o nome da mae",
+      options: motherOptions,
+    },
+    {
+      key: "monthlyIncome",
+      prompt: "Qual e sua faixa salarial atual?",
+      placeholder: "Selecione",
+      options: [
+        {
+          value: "UNEMPLOYED",
+          label: "Desempregado(a)",
+        },
+        {
+          value: "UP_TO_2640",
+          label: "Ate R$ 2.640 (ate 2 Salarios Minimos)",
+        },
+        {
+          value: "2641_TO_6600",
+          label: "De R$ 2.641 A R$ 6.600 (2 A 5 Salarios Minimos)",
+        },
+        {
+          value: "6601_TO_13200",
+          label: "De R$ 6.601 A R$ 13.200 (5 A 10 Salarios Minimos)",
+        },
+        {
+          value: "ABOVE_13200",
+          label: "Acima De R$ 13.200 (mais De 10 Salarios Minimos)",
+        },
+      ],
+    },
+    {
+      key: "debtType",
+      prompt: "Qual o tipo de divida que deseja renegociar?",
+      placeholder: "Selecione",
+      options: [
+        {
+          value: "BANKING",
+          label: "Dividas Bancarias (banco, Financeira)",
+        },
+        {
+          value: "CARD",
+          label: "Cartao De Credito",
+        },
+        {
+          value: "FINANCING",
+          label: "Financiamento De Veiculo Ou Imovel",
+        },
+        {
+          value: "SERVICES",
+          label: "Contas De Servicos (agua, Luz, Telefone)",
+        },
+        {
+          value: "OTHER",
+          label: "Outros Tipos De Divida",
+        },
+      ],
+    },
+    {
+      key: "email",
+      prompt: "Qual e o seu email?",
+      placeholder: "Digite seu e-mail",
+      type: "email",
+    },
+    {
+      key: "phone",
+      prompt: "Qual e o seu telefone?",
+      placeholder: "(00) 00000-0000",
+      type: "tel",
+    },
+  ] as Field[];
+}
+
+function getRealValue(flow: ReturnType<typeof useDemoFlow>, key: ConfirmationKey) {
+  if (!flow) return "";
+  if (key === "fullName") return flow.profile.displayName?.trim() || "";
+  if (key === "birthDate") return flow.profile.birthDate || "";
+  return flow.profile.motherName?.trim() || "";
+}
+
 function maskPhone(value: string) {
   const d = value.replace(/\D/g, "").slice(0, 11);
   if (d.length <= 2) return d;
@@ -104,6 +193,8 @@ function validate(key: keyof DemoAnswers, value: string) {
       value.trim().split(/\s+/).length < 2)
   )
     return "Digite seu nome completo.";
+  if (key === "motherName" && value.trim().length < 5)
+    return "Selecione o nome da mae.";
   if (key === "monthlyIncome" && !value) return "Selecione uma faixa de renda.";
   if (
     key === "birthDate" &&
@@ -148,8 +239,21 @@ export default function VerificationPage() {
       </>
     );
   const activeFlow = flow;
-  const index = Math.min(activeFlow.verificationStep, fields.length - 1);
-  const field = fields[index];
+  const dynamicFields = useMemo(
+    () =>
+      buildFields(
+        activeFlow.profile.displayName?.trim() || "",
+        activeFlow.profile.birthDate || "",
+        activeFlow.profile.motherName?.trim() || "",
+      ),
+    [
+      activeFlow.profile.displayName,
+      activeFlow.profile.birthDate,
+      activeFlow.profile.motherName,
+    ],
+  );
+  const index = Math.min(activeFlow.verificationStep, dynamicFields.length - 1);
+  const field = dynamicFields[index];
   const value = activeFlow.answers[field.key];
   const suggestions = field.key === "email" ? emailSuggestions(value) : [];
   function update(next: string) {
@@ -163,6 +267,22 @@ export default function VerificationPage() {
     setError("");
   }
   async function confirm() {
+    if (
+      field.key === "fullName" ||
+      field.key === "birthDate" ||
+      field.key === "motherName"
+    ) {
+      const realValue = getRealValue(activeFlow, field.key);
+      if (!value) {
+        setError("Selecione uma opcao para confirmar.");
+        return;
+      }
+      if (value !== realValue) {
+        setError("Opcao incorreta. Confirme o dado real retornado na consulta.");
+        return;
+      }
+    }
+
     const validationError = validate(field.key, value);
     if (validationError) {
       setError(validationError);
@@ -172,7 +292,7 @@ export default function VerificationPage() {
     await new Promise((r) => setTimeout(r, index === 0 ? 5000 : 3500));
     setStatus("success");
     await new Promise((r) => setTimeout(r, 350));
-    if (index === fields.length - 1) {
+    if (index === dynamicFields.length - 1) {
       router.push("/saiba-mais");
       return;
     }
@@ -225,9 +345,7 @@ export default function VerificationPage() {
                   id={`field-${field.key}`}
                   type={field.type ?? "text"}
                   inputMode={
-                    field.key === "monthlyIncome" || field.key === "phone"
-                      ? "numeric"
-                      : undefined
+                    field.key === "phone" ? "numeric" : undefined
                   }
                   value={value}
                   onChange={(e) => update(e.target.value)}

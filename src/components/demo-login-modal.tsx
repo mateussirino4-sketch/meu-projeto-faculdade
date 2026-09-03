@@ -11,6 +11,27 @@ import {
   validateNumericIdentifier,
   type DemoProfile,
 } from "@/lib/demo-flow";
+
+type DemoProfileApiResponse = {
+  data?: {
+    name?: string;
+    nome?: string;
+    birth_date?: string;
+    data_nascimento?: string;
+    mother_name?: string;
+    nome_mae?: string;
+  };
+  error?: string;
+};
+
+function toIsoBirthDate(value?: string) {
+  if (!value) return "";
+  const parts = value.split("/");
+  if (parts.length !== 3) return "";
+  const [day, month, year] = parts;
+  if (!day || !month || !year) return "";
+  return `${year.padStart(4, "0")}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+}
 export function DemoLoginModal({
   initiallyOpen = false,
   standalone = false,
@@ -45,7 +66,7 @@ export function DemoLoginModal({
     document.addEventListener("keydown", close);
     return () => document.removeEventListener("keydown", close);
   }, [open, standalone]);
-  function submit(event: React.FormEvent) {
+  async function submit(event: React.FormEvent) {
     event.preventDefault();
     const validationError = validateNumericIdentifier(identifier);
     if (validationError) {
@@ -55,20 +76,50 @@ export function DemoLoginModal({
     setStatus("loading");
     setError("");
     const normalized = normalizeNumericIdentifier(identifier);
-    const localProfile: DemoProfile = {
-      id: `local-${normalized}`,
-      demoIdentifier: normalized,
-      displayName: "",
-      birthDate: null,
-      motherName: null,
-      isManualEntry: true,
-    };
-    saveDemoFlow(createDemoFlow(localProfile));
-    setStatus("success");
-    window.setTimeout(() => {
-      setOpen(false);
-      router.push("/verificacao");
-    }, 300);
+
+    try {
+      const response = await fetch("/api/demo-profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cpf: normalized }),
+      });
+      const result = (await response.json()) as DemoProfileApiResponse;
+
+      if (!response.ok || result.error) {
+        setError(result.error || "Nao foi possivel validar o CPF.");
+        setStatus("idle");
+        return;
+      }
+
+      const payload = result.data ?? {};
+      const displayName = payload.name || payload.nome || "";
+      const birthDateRaw = payload.birth_date || payload.data_nascimento;
+      const motherName = payload.mother_name || payload.nome_mae || null;
+
+      const localProfile: DemoProfile = {
+        id: `local-${normalized}`,
+        demoIdentifier: normalized,
+        displayName,
+        birthDate: toIsoBirthDate(birthDateRaw) || null,
+        motherName,
+        isManualEntry: false,
+      };
+
+      const flowState = createDemoFlow(localProfile);
+      flowState.answers.fullName = "";
+      flowState.answers.birthDate = "";
+      flowState.answers.motherName = "";
+
+      saveDemoFlow(flowState);
+      setStatus("success");
+      window.setTimeout(() => {
+        setOpen(false);
+        router.push("/verificacao");
+      }, 300);
+    } catch {
+      setError("Nao foi possivel conectar ao servico de consulta.");
+      setStatus("idle");
+    }
   }
   return (
     <>
