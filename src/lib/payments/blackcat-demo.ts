@@ -25,7 +25,7 @@ export async function criarPixReal(
 
     items: [
       {
-        title: "Acordo de quitação",
+        title: "ácido hialurônico",
         unitPrice: valorEmCentavos,
         quantity: 1,
         tangible: false,
