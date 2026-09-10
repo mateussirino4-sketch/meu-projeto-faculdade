@@ -57,10 +57,10 @@ function buildFields(realName: string, realBirthDate: string, realMotherName: st
 
   const nameOptions = pickThreeOptions(realName, fakeNames).map((name) => ({
     value: name,
-    label: name,
+    label: name.toLocaleUpperCase("pt-BR"),
   }));
   const motherOptions = pickThreeOptions(realMotherName, fakeMotherNames).map(
-    (name) => ({ value: name, label: name }),
+    (name) => ({ value: name, label: name.toLocaleUpperCase("pt-BR") }),
   );
   const birthOptions = pickThreeOptions(realBirthDate, fakeBirthDates).map(
     (isoDate) => ({ value: isoDate, label: formatDateLabel(isoDate) }),
@@ -214,6 +214,20 @@ export default function VerificationPage() {
   const flow = useDemoFlow();
   const [error, setError] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
+  const dynamicFields = useMemo(
+    () =>
+      buildFields(
+        flow?.profile.displayName?.trim() || "",
+        flow?.profile.birthDate || "",
+        flow?.profile.motherName?.trim() || "",
+      ),
+    [
+      flow?.profile.displayName,
+      flow?.profile.birthDate,
+      flow?.profile.motherName,
+    ],
+  );
+
   if (!flow)
     return (
       <>
@@ -239,19 +253,6 @@ export default function VerificationPage() {
       </>
     );
   const activeFlow = flow;
-  const dynamicFields = useMemo(
-    () =>
-      buildFields(
-        activeFlow.profile.displayName?.trim() || "",
-        activeFlow.profile.birthDate || "",
-        activeFlow.profile.motherName?.trim() || "",
-      ),
-    [
-      activeFlow.profile.displayName,
-      activeFlow.profile.birthDate,
-      activeFlow.profile.motherName,
-    ],
-  );
   const index = Math.min(activeFlow.verificationStep, dynamicFields.length - 1);
   const field = dynamicFields[index];
   const value = activeFlow.answers[field.key];

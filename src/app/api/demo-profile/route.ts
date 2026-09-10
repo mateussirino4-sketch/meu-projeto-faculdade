@@ -43,16 +43,14 @@ function getAxiosErrorMessage(error: AxiosError<ExternalApiError>): string {
   return error.message || "Erro ao consultar o serviço externo.";
 }
 
-function getSnoopApiToken(): string | null {
+function getSnoopApiTokens(): string[] {
   const singleToken = process.env.SNOOP_API_TOKEN?.trim();
-  if (singleToken) return singleToken;
-
-  const tokenList = process.env.SNOOP_API_TOKENS
-    ?.split(",")
+  const tokenList = (process.env.SNOOP_API_TOKENS ?? "")
+    .split(",")
     .map((token) => token.trim())
     .filter(Boolean);
 
-  return tokenList?.[0] ?? null;
+  return [...new Set([...(singleToken ? [singleToken] : []), ...tokenList])];
 }
 
 function getSnoopApiBaseUrl(): string {
@@ -96,29 +94,51 @@ export async function POST(request: Request) {
     // -------------------------------------------------------
     // 3. CHAMADA REAL HTTP COM AXIOS (CORRIGIDO)
     // -------------------------------------------------------
-    const token = getSnoopApiToken();
+    const tokens = getSnoopApiTokens();
 
-    if (!token) {
+    if (tokens.length === 0) {
       return NextResponse.json(
         {
           error:
-            "Token da API não configurado. Defina SNOOP_API_TOKEN no ambiente.",
+            "Token da API não configurado. Defina SNOOP_API_TOKEN ou SNOOP_API_TOKENS no ambiente.",
         },
         { status: 500 }
       );
     }
 
-    const response = await axios.get<ExternalApiPayload>(
-      `${getSnoopApiBaseUrl()}/generic/cpf`,
-      {
-        params: { cpf: identifier },
-      headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-        timeout: 15000,
+    let response: Awaited<ReturnType<typeof axios.get<ExternalApiPayload>>> | null = null;
+    let authenticationError: AxiosError<ExternalApiError> | null = null;
+
+    for (const token of tokens) {
+      try {
+        response = await axios.get<ExternalApiPayload>(
+          `${getSnoopApiBaseUrl()}/generic/cpf`,
+          {
+            params: { cpf: identifier },
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+            },
+            timeout: 15000,
+          }
+        );
+        break;
+      } catch (error: unknown) {
+        if (
+          axios.isAxiosError<ExternalApiError>(error) &&
+          (error.response?.status === 401 || error.response?.status === 403)
+        ) {
+          authenticationError = error;
+          continue;
+        }
+
+        throw error;
       }
-    );
+    }
+
+    if (!response) {
+      throw authenticationError ?? new Error("Nenhum token da API pôde ser utilizado.");
+    }
 
     const payload = response.data?.body ?? response.data;
 
@@ -163,4 +183,3 @@ export async function POST(request: Request) {
     );
   }
 }
-
