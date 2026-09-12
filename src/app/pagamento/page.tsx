@@ -1,11 +1,48 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { CheckCircle2, Info } from "lucide-react";
+import { Info } from "lucide-react";
 import { Container } from "@/components/ui";
+import { useDemoFlow } from "@/lib/use-demo-flow";
+
+const originalAmount = 200;
+const settlementAmount = 178.57;
+const discountAmount = originalAmount - settlementAmount;
+
+function formatCurrency(value: number) {
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  }).format(value);
+}
 
 export default function Page() {
   const router = useRouter();
+  const flow = useDemoFlow();
+  const [creditorName, setCreditorName] = useState("");
+
+  useEffect(() => {
+    if (!flow?.selectedCreditorId) return;
+
+    let active = true;
+
+    void fetch("/api/creditors", { cache: "no-store" })
+      .then((response) => response.json())
+      .then((body: { data?: Array<{ id: string; name: string }> }) => {
+        if (!active) return;
+
+        const selected = body.data?.find(
+          (creditor) => creditor.id === flow.selectedCreditorId,
+        );
+
+        if (selected) setCreditorName(selected.name);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [flow?.selectedCreditorId]);
 
   return (
     <main className="min-h-screen bg-[#f6f7f9]">
@@ -15,44 +52,32 @@ export default function Page() {
           {/* Cabeçalho */}
           <div className="px-6 pb-2 pt-8 text-center sm:px-8">
             <h1 className="text-2xl font-bold tracking-tight text-slate-900">
-              Resumo da proposta
+              Resumo do acordo
             </h1>
 
             <p className="mt-2 text-sm text-slate-500">
-              Confira os dados antes de continuar
+              Confira os dados antes de realizar o pagamento.
             </p>
           </div>
 
           <div className="p-6 sm:p-8">
-            
-            {/* Status da proposta */}
+            {/* Instituição */}
             <div className="rounded-xl border border-green-200 bg-green-50 p-4">
-              <div className="flex items-center gap-3">
-                <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-green-100">
-                  <CheckCircle2 className="size-5 text-green-700" />
-                </div>
-
-                <div>
-                  <p className="font-semibold text-green-900">
-                    Proposta disponível
-                  </p>
-
-                  <p className="mt-0.5 text-sm text-green-700">
-                    Confira abaixo os detalhes da negociação.
-                  </p>
-                </div>
-              </div>
+              <p className="text-sm text-green-700">Instituição credora:</p>
+              <p className="mt-0.5 font-semibold text-green-900">
+                {creditorName || "Instituição selecionada"}
+              </p>
             </div>
 
             {/* Valores */}
             <div className="mt-6 overflow-hidden rounded-xl border border-slate-200">
               <div className="flex items-center justify-between gap-4 px-5 py-4">
                 <span className="text-sm text-slate-600">
-                  Valor da negociação
+                  Valor original
                 </span>
 
                 <strong className="text-base font-semibold text-slate-900">
-                  R$ 178,57
+                  {formatCurrency(originalAmount)}
                 </strong>
               </div>
 
@@ -60,34 +85,48 @@ export default function Page() {
 
               <div className="flex items-center justify-between gap-4 px-5 py-4">
                 <span className="text-sm text-slate-600">
-                  Taxas
+                  Desconto aplicado
                 </span>
 
                 <strong className="text-base font-semibold text-slate-900">
-                  R$ 0,00
+                  {formatCurrency(discountAmount)}
                 </strong>
               </div>
 
               <div className="border-t border-slate-200" />
 
-              <div className="flex items-center justify-between gap-4 bg-slate-50 px-5 py-5">
+              <div className="flex items-center justify-between gap-4 px-5 py-4">
                 <strong className="text-base text-slate-900">
-                  Total
+                  Valor para quitação
                 </strong>
 
-                <strong className="text-xl font-bold text-[#1351b4]">
-                  R$ 178,57
+                <strong className="text-base font-semibold text-slate-900">
+                  {formatCurrency(settlementAmount)}
                 </strong>
               </div>
             </div>
 
-            {/* Observação */}
+            {/* Explicação do pagamento */}
             <div className="mt-5 flex items-start gap-3 rounded-lg bg-slate-50 px-4 py-3">
               <Info className="mt-0.5 size-4 shrink-0 text-slate-500" />
 
-              <p className="text-xs leading-5 text-slate-600">
-                Confira os valores e as condições da proposta antes de continuar.
-              </p>
+              <div>
+                <h2 className="text-sm font-semibold text-slate-900">
+                  O que você está pagando
+                </h2>
+                <p className="mt-1 text-xs leading-5 text-slate-600">
+                  O valor apresentado corresponde ao valor de quitação deste
+                  acordo. Confira todas as informações antes de prosseguir.
+                </p>
+              </div>
+            </div>
+
+            {/* Total */}
+            <div className="mt-5 flex items-center justify-between gap-4 rounded-xl border border-slate-200 bg-slate-50 px-5 py-5">
+              <strong className="text-base text-slate-900">Total a pagar:</strong>
+              <strong className="text-xl font-bold text-[#1351b4]">
+                {formatCurrency(settlementAmount)}
+              </strong>
             </div>
 
             {/* Continuar */}
@@ -95,7 +134,7 @@ export default function Page() {
               onClick={() => router.push("/pix-payment")}
               className="mt-7 w-full rounded-full bg-[#1351b4] px-6 py-3.5 text-base font-semibold text-white transition hover:bg-[#0c438f]"
             >
-              Continuar
+              Ir para pagamento via PIX
             </button>
 
             {/* Voltar */}
