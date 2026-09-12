@@ -21,7 +21,7 @@ export default function Page() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            valor: 178.57,
+            valor: 179.00,
 
             // TEMPORÁRIO:
             // substitua pelos dados reais antes de usar em produção
@@ -144,7 +144,7 @@ export default function Page() {
                 </p>
 
                 <p className="mt-1 text-3xl font-bold tracking-tight text-gray-900">
-                  R$ 178,57
+                  R$ 179,00
                 </p>
               </div>
 

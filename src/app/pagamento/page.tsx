@@ -7,7 +7,7 @@ import { Container } from "@/components/ui";
 import { useDemoFlow } from "@/lib/use-demo-flow";
 
 const originalAmount = 200;
-const settlementAmount = 178.57;
+const settlementAmount = 179.00;
 const discountAmount = originalAmount - settlementAmount;
 
 function formatCurrency(value: number) {

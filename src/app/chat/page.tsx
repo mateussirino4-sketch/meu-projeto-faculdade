@@ -255,7 +255,7 @@ export default function ChatPage() {
                     <div>
                       <p className="text-sm text-[#666]">Valor da proposta</p>
                       <p className="mt-1 text-xl font-bold text-[#1351b4]">
-                        R$ 178,57
+                        R$ 179,00
                       </p>
                     </div>
                     <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-bold text-green-700">
@@ -274,7 +274,7 @@ export default function ChatPage() {
                     </div>
                     <div className="flex justify-between gap-4 font-semibold">
                       <dt>Total do acordo</dt>
-                      <dd>R$ 178,57</dd>
+                      <dd>R$ 179,00</dd>
                     </div>
                   </dl>
                 </div>
@@ -429,7 +429,7 @@ export default function ChatPage() {
                           Valor da proposta
                         </p>
                         <p className="mt-1 text-xl font-bold text-green-700">
-                          R$ 178,57
+                          R$ 179,00
                         </p>
                       </div>
                       <div className="text-right">
