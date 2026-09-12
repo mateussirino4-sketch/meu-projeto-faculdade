@@ -161,8 +161,8 @@ export default function Page() {
                 </p>
 
                 <p className="mt-2 text-sm font-bold leading-6 text-gray-900">
-                  Antes de confirmar, confira o nome do recebedor e o valor de
-                  R$ 178,57 no aplicativo do seu banco.
+                  Confira os dados apresentados pelo seu banco antes de
+                  confirmar.
                 </p>
               </div>
 
