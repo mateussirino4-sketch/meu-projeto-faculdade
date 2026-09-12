@@ -148,6 +148,21 @@ export default function Page() {
                 </p>
               </div>
 
+              {/* Processamento do pagamento */}
+              <div className="mt-5 rounded-xl border border-gray-200 bg-gray-50 px-4 py-4 sm:px-5">
+                <p className="text-sm font-semibold text-gray-900">
+                  Pagamento processado via PIX
+                </p>
+
+                <p className="mt-1.5 text-xs leading-5 text-gray-600">
+                  A instituição exibida pelo seu banco no momento do pagamento
+                  pode ser diferente da instituição credora do acordo, pois o
+                  PIX pode ser processado por outra instituição de pagamento.
+                  Você pode prosseguir com confiança após conferir o nome do
+                  recebedor e o valor de R$ 178,57 no aplicativo do seu banco.
+                </p>
+              </div>
+
               {/* PIX copia e cola */}
               <div className="mt-7">
                 <p className="text-sm font-bold text-gray-900">
