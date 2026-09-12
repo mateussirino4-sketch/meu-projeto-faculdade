@@ -270,7 +270,7 @@ export default function ChatPage() {
                     </div>
                     <div className="flex justify-between gap-4">
                       <dt>Desconto</dt>
-                      <dd>R$ 21,43</dd>
+                      <dd>R$ 21,00</dd>
                     </div>
                     <div className="flex justify-between gap-4 font-semibold">
                       <dt>Total do acordo</dt>
