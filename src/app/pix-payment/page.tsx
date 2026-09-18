@@ -137,6 +137,14 @@ export default function Page() {
                 </div>
               )}
 
+              {qrCode && (
+                <p className="mx-auto mt-3 max-w-[420px] text-center text-xs leading-5 text-gray-500">
+                  🔒 Pagamento seguro. Após a confirmação, o protocolo de
+                  acordo será enviado para o seu e-mail e o processo de
+                  regularização será iniciado de imediato
+                </p>
+              )}
+
               {/* Valor */}
               <div className="mx-auto mt-6 max-w-[360px] rounded-xl bg-gray-50 px-5 py-4 text-center">
                 <p className="text-sm font-medium text-gray-500">

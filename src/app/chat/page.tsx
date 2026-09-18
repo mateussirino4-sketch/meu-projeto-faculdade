@@ -483,9 +483,17 @@ export default function ChatPage() {
                 </button>
               )}
               {stage === 5 && (
-                <button
-                  onClick={() =>
-                   void reply(
+                <div>
+                  <div className="mb-3 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-5 text-slate-600">
+                    <strong className="font-semibold text-slate-800">Aviso:</strong>{" "}
+                    O valor de R$ 179,00 refere-se à taxa de assessoria e
+                    intermediação de acordos, cobrindo o serviço de protocolo e
+                    regularização
+                  </div>
+
+                  <button
+                    onClick={() =>
+                     void reply(
   "Confirmar proposta",
   `Prezado(a) ${flow.answers.fullName || flow.profile.displayName}, sua proposta foi confirmada com sucesso junto a ${creditorName}.
 
@@ -494,13 +502,14 @@ Número do Protocolo: ${demoProtocol}
 Guarde este número para acompanhar sua proposta.`,
   6,
 )
-                  }
-                  disabled={typing}
-                  className="flex w-full items-center justify-center gap-2 rounded-full bg-[#1351b4] py-3 font-bold text-white"
-                >
-                  {typing && <LoaderCircle className="size-5 animate-spin" />}✓
-                  Confirmar Acordo de Quitação
-                </button>
+                    }
+                    disabled={typing}
+                    className="flex w-full items-center justify-center gap-2 rounded-full bg-[#1351b4] py-3 font-bold text-white"
+                  >
+                    {typing && <LoaderCircle className="size-5 animate-spin" />}✓
+                    Confirmar Acordo de Quitação
+                  </button>
+                </div>
               )}
             {stage === 6 && (
   <button
